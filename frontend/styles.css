@@ -1,0 +1,91 @@
+/* Basic CSS Reset (Mimics Tailwind Preflight) */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Layout Body */
+.layout-body {
+    background-color: #f3f4f6; /* bg-gray-100 */
+    color: #1f2937;            /* text-gray-800 */
+    height: 100vh;             /* h-screen */
+    display: flex;             /* flex */
+    flex-direction: column;    /* flex-col */
+}
+
+/* Header */
+.app-header {
+    background-color: #ffffff; /* bg-white */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+    padding: 1rem;             /* p-4 */
+}
+
+.app-title {
+    font-size: 1.25rem;        /* text-xl */
+    line-height: 1.75rem;
+    font-weight: 700;          /* font-bold */
+    color: #2563eb;            /* text-blue-600 */
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;              /* flex-grow */
+    display: flex;             /* flex */
+    padding: 1rem;             /* p-4 */
+    gap: 1rem;                 /* gap-4 */
+    overflow: hidden;          /* overflow-hidden */
+}
+
+/* Viewer Section */
+.viewer-section {
+    flex: 1 1 0%;              /* flex-1 */
+    background-color: #ffffff; /* bg-white */
+    border-radius: 0.25rem;    /* rounded */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+    padding: 1rem;             /* p-4 */
+    display: flex;             /* flex */
+    flex-direction: column;    /* flex-col */
+}
+
+.section-title {
+    font-weight: 600;          /* font-semibold */
+    margin-bottom: 0.5rem;     /* mb-2 */
+    border-bottom: 1px solid #e5e7eb; /* border-b (and default gray-200 color) */
+    padding-bottom: 0.5rem;    /* pb-2 */
+}
+
+.render-area {
+    flex-grow: 1;              /* flex-grow */
+    border: 2px dashed #d1d5db;/* border-2 border-dashed border-gray-300 */
+    display: flex;             /* flex */
+    align-items: center;       /* items-center */
+    justify-content: center;   /* justify-center */
+    background-color: #f9fafb; /* bg-gray-50 */
+    overflow: auto;            /* overflow-auto */
+}
+
+.empty-state-text {
+    color: #9ca3af;            /* text-gray-400 */
+}
+
+/* Editor Section */
+.editor-section {
+    width: 25%;                /* w-1/4 */
+    min-width: 250px;          /* min-w-[250px] */
+    background-color: #ffffff; /* bg-white */
+    border-radius: 0.25rem;    /* rounded */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow */
+    padding: 1rem;             /* p-4 */
+}
+
+.tools-container {
+    display: flex;             /* flex */
+    flex-direction: column;    /* flex-col */
+    gap: 0.75rem;              /* gap-3 */
+    margin-top: 1rem;          /* mt-4 */
+}
