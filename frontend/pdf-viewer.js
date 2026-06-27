@@ -5,7 +5,7 @@ export class PdfViewer {
     }
 
     loadPdf(file){
-        console.log('[PdfViewer] Loading ${file.name}...');
+        console.log(`[PdfViewer] Loading ${file.name}...`);
 
         // Placeholder for actual rendering logic (e.g., using PDF.js)
         this.container.innerHTML = `
