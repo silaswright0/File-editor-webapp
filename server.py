@@ -1,5 +1,6 @@
 from flask import Flask, send_from_directory, jsonify, request
 import os
+import shutil
 
 app = Flask(__name__, static_folder='frontend')
 STORAGE_DIR = "./storage"
@@ -47,5 +48,7 @@ def upload_pdf():
 
 
 if __name__ == '__main__':
+    if os.path.exists(STORAGE_DIR):
+        shutil.rmtree(STORAGE_DIR)
     os.makedirs(STORAGE_DIR, exist_ok=True)
     app.run(debug=True,port=5000)
