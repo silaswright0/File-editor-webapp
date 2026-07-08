@@ -5,16 +5,27 @@ export class PdfEditor {
 
     initTools() {
         this.toolsContainer.innerHTML = `
-            <button id="add-text-btn" class="w-full bg-blue-50px text-blue-600 border border-blue-600 hover:bg-blue-600 hover:text-white transition-colors p-2 rounded">
-                Add Text Box
-            </button>
-            <button id="highlight-btn" class="w-full bg-yellow-50 text-yellow-600 border border-yellow-600 hover:bg-yellow-500 hover:text-white transition-colors p-2 rounded">
-                Highlight Tool
-            </button>
-            <div class="flex-grow"></div>
-            <button id="save-btn" class="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 shadow-md">
-                Save & Export
-            </button>
+            <div style="display: flex; gap: 12px; justify-content: center; padding: 10px; background-color: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb;">
+                
+                <button id="add-text-btn" title="Add Text" style="padding: 8px; cursor: pointer; border: none; background: transparent; color: #4b5563;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 20V4m-7 4V4h14v4"></path>
+                    </svg>
+                </button>
+
+                <button id="highlight-btn" title="Highlight" style="padding: 8px; cursor: pointer; border: none; background: transparent; color: #4b5563;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                    </svg>
+                </button>
+
+                <button id="save-btn" title="Save & Export" style="padding: 8px; cursor: pointer; border: none; background: transparent; color: #10b981; margin-left: auto;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                    </svg>
+                </button>
+
+            </div>
         `;
 
         this.attachListeners();
@@ -33,7 +44,7 @@ export class PdfEditor {
 
     async saveToServer() {
         console.log('Sending data to /api/pdf/upload...');
-        /*
+        /*TODO
         const formData = new FormData();
         formData.append('file', blobData);
         
