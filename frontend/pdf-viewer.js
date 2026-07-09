@@ -6,13 +6,13 @@ export class PdfViewer {
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    loadPdf(file){
+    async loadPdf(file){
         console.log(`[PdfViewer] Loading ${file.name}...`);
         this.container.innerHTML = `<p style="color: #2563eb;">Rendering Document...</p>`;
         
         try {
-            const arrayBuffer = await file.arrayBuffer();
-            const loadingTask = window.pdfjsLib.getDocument({data: arrayBuffer});
+            const fileBuffer = await file.arrayBuffer();
+            const loadingTask = window.pdfjsLib.getDocument({data: fileBuffer});
             this.currentDocument = await loadingTask.promise;
 
             const page = await this.currentDocument.getPage(1);
