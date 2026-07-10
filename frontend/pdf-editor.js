@@ -19,6 +19,12 @@ export class PdfEditor {
                     </svg>
                 </button>
 
+                <button id="color-btn" title="Coloring Tool" style="padding: 8px; cursor: pointer; border: none; background: transparent; color: #4b5563;">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                    </svg>
+                </button>
+
                 <button id="save-btn" title="Save & Export" style="padding: 8px; cursor: pointer; border: none; background: transparent; color: #10b981; margin-left: auto;">
                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
@@ -34,6 +40,14 @@ export class PdfEditor {
     attachListeners(){
         document.getElementById('add-text-btn').addEventListener('click', () => {
             console.log('[PdfEditor] Add text tool activated');
+        });
+
+        document.getElementById('highlight-btn').addEventListener('click', () => {
+            console.log('[PdfEditor] Highlight tool activated');
+        });
+
+        document.getElementById('color-btn').addEventListener('click', () => {
+            console.log('[PdfEdtior] Colour tool activated');
         });
 
         document.getElementById('save-btn').addEventListener('click', () => {

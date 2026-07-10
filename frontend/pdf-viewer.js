@@ -11,7 +11,8 @@ export class PdfViewer {
         this.container.innerHTML = `<p style="color: #2563eb;">Rendering Document...</p>`;
         
         try {
-            const fileBuffer = await file.arrayBuffer();
+            const rawBuffer = await file.arrayBuffer();
+            const fileBuffer = new Uint8Array(rawBuffer);
             const loadingTask = window.pdfjsLib.getDocument({data: fileBuffer});
             this.currentDocument = await loadingTask.promise;
 
