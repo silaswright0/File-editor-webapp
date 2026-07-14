@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusMessage.innerText = `Success! Saved as: ${data.filename}`;
                 statusMessage.style.color = "green";
 
-                //pass file to pdf.js to render on screen
+                viewer.loadPdf(file);
             } else {
                 statusMessage.innerText = `Upload failed: ${data.error}`;
                 statusMessage.style.color = "red";

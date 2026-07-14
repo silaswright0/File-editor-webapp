@@ -8,26 +8,29 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="/styles.css">
     </head>
-    <body>
-        <header>
-            <h1>File Editor Webapp</h1>
+    <body class="layout-body">
+        <header class="app-header">
+            <h1 class="app-title">File Editor Webapp</h1>
         </header>
-        <main>
-            <section>
-                    <div>
+        <main class="main-content">
+            <section class="viewer-section">
+                    <div style="margin-bottom: 1rem;">
                         <input type="file" id="pdf-file-input" accept=".pdf">
                         <button id="upload-btn" class="border border-blue-600 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors">Upload file</button>
                         <p id="status-message"></p>
                     </div>
+
+                    <div id="pdf-render-area" class="render-area">
+                        <p class="empty-state-text">No PDF loaded</p>
+                    </div>
             </section>
 
-            <section>
-                <div id="editor-tools">
+            <section class="editor-section">
+                <h2 class="section-title">Editor tools</h2>
+                <div id="editor-tools" class="tools-container">
 
                 </div>
-                <div id="pdf-render-area" class="render-area">
-
-                </div>
+                
             </section>
         </main>
         <script type="module" src="/app.js"></script>
