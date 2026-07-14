@@ -22,7 +22,7 @@ def serve_static(path):
     return send_from_directory('frontend',path)
 
 
-@app.route('/api/pdf/upload', methods=['POST'])
+@app.route('/api/pdf/upload', methods=['POST', 'OPTIONS'])
 def upload_pdf():
 
     if request.method == 'OPTIONS':

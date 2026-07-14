@@ -1,6 +1,14 @@
 export class PdfEditor {
     constructor(toolsContainerId) {
         this.toolsContainer = document.getElementById(toolsContainerId);
+        this.currentPdfBytes = null;
+        this.currentFilename = 'document.pdf';
+        this.onEdit = null;
+    }
+
+    setPdfBytes(bytes, filename){
+        this.currentFilename = bytes;
+        this.currentFilename = filename;
     }
 
     initTools() {
@@ -38,8 +46,27 @@ export class PdfEditor {
     }
 
     attachListeners(){
-        document.getElementById('add-text-btn').addEventListener('click', () => {
+        document.getElementById('add-text-btn').addEventListener('click', async () => {
+            if(!this.currentPdfBytes){
+                alert('Please upload a file first');
+                return;
+            }
             console.log('[PdfEditor] Add text tool activated');
+
+            const {PDFDocument, rgb} = window.PDFLib;
+            const pdfDoc = await PDFDocument.load(this.currentPdfBytes);
+            const pages = pdfDoc.getPages();
+            const firstPage = pages[0];
+            firstPage.drawText('edited via webapp', {
+                x: 50,
+                y: firstPage.getHeight() -100,
+                size: 24,
+                color: rgb(0.95,0.1,0.1)
+            });
+            this.currentPdfBytes = await pdfDoc.save();
+            if(this.onEdit){
+                this.onEdit(this.currentPdfBytes);
+            }
         });
 
         document.getElementById('highlight-btn').addEventListener('click', () => {
@@ -57,15 +84,38 @@ export class PdfEditor {
     }
 
     async saveToServer() {
+        if(!this.currentPdfBytes){
+            alert("no pdf uploaded");
+            return;
+        }
         console.log('Sending data to /api/pdf/upload...');
-        /*TODO
+        const blobData = new Blob([this.currentPdfBytes], {type: 'application/pdf'});
+        const exportFilename = `edited_${this.currentFilename}`;
+        const downloadUrl = URL.createObjectURL(blobData);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = exportFilename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(downloadUrl);
+
         const formData = new FormData();
-        formData.append('file', blobData);
-        
-        const response = await fetch('/api/pdf/upload', {
-            method: 'POST',
-            body: formData
-        });
-        */
+        formData.append('file', blobData, exportFilename);
+
+        try{
+            const response = await fetch ('http://localhost:5000/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok){
+                console.log("[PdfEditor] Success! Saved to server as", exportFilename);
+            }else{
+                console.log("[PdfEditor] Server rejected the save");
+            }
+        }catch(error){
+            console.error("[PdfEditor] Network error saving to server");
+        }
     }
 }
