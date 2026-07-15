@@ -7,7 +7,7 @@ export class PdfEditor {
     }
 
     setPdfBytes(bytes, filename){
-        this.currentFilename = bytes;
+        this.currentPdfBytes = bytes;
         this.currentFilename = filename;
     }
 
@@ -104,7 +104,7 @@ export class PdfEditor {
         formData.append('file', blobData, exportFilename);
 
         try{
-            const response = await fetch ('http://localhost:5000/api/upload', {
+            const response = await fetch ('http://localhost:5000/api/pdf/upload', {
                 method: 'POST',
                 body: formData
             });

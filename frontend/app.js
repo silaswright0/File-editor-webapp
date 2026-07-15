@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     editor.initTools();
 
     editor.onEdit = async (modifiedBytes) => {
-        await viewer.loadPdfBytes(modifiedBytes);
+        await viewer.loadPdf(modifiedBytes);
     };
     document.getElementById('upload-btn').addEventListener('click', async () => {
         const fileInput = document.getElementById('pdf-file-input');
@@ -22,10 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const file = fileInput.files[0];//take only one file
 
         console.log(`[App] Original file size: ${file.size} bytes`);
-        if (file.size === 0) {
-            alert("This file is 0 bytes! It might be a corrupted file or an iCloud/OneDrive cloud stub. Please try a different PDF.");
-            return;
-        }
+        
         const arrayBuffer = await file.arrayBuffer();
         console.log(`[App] Buffer size extracted: ${arrayBuffer.byteLength} bytes`);
 
@@ -47,14 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 statusMessage.innerText = `Success! Saved as: ${data.filename}`;
                 statusMessage.style.color = "green";
 
-                const arraybuffer = await file.arraybuffer;
-                await viewer.loadPdfBytes(arraybuffer);
+                viewer.loadPdf(arrayBuffer);
 
                 if (editor.setPdfBytes){
-                    editor.setPdfBytes(arraybuffer,file.name);
+                    editor.setPdfBytes(arrayBuffer,file.name);
                 }
-
-                //viewer.loadPdf(file);
             } else {
                 statusMessage.innerText = `Upload failed: ${data.error}`;
                 statusMessage.style.color = "red";

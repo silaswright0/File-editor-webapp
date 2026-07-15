@@ -6,18 +6,20 @@ export class PdfViewer {
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
-    async loadPdfBytes(buffer){
-        console.log(`[PdfViewer] Loading...`);
+    async loadPdf(data){
+        console.log(`[PdfViewer] Loading... `);
         this.container.innerHTML = `<p style="color: #2563eb;">Rendering Document...</p>`;
         
         try {
-            //const rawBuffer = await file.arrayBuffer();
-            if (!buffer || buffer.byteLength === 0) {
-                throw new Error("Viewer received 0 bytes. The file stream is empty!");
+            let objectUrl;
+            if (data instanceof Blob || data instanceof File) {
+                objectUrl = URL.createObjectURL(data);
+            } else {
+                const blob = new Blob([data], { type: 'application/pdf' });
+                objectUrl = URL.createObjectURL(blob);
             }
-            
-            const fileBuffer = new Uint8Array(buffer);
-            const loadingTask = window.pdfjsLib.getDocument({data: fileBuffer});
+        
+            const loadingTask = window.pdfjsLib.getDocument({url: objectUrl});
             this.currentDocument = await loadingTask.promise;
 
             const page = await this.currentDocument.getPage(1);
