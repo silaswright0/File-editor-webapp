@@ -75,12 +75,45 @@ export class PdfEditor {
 
         document.getElementById('color-btn').addEventListener('click', () => {
             console.log('[PdfEdtior] Colour tool activated');
+            if (this.onDrawToggle) this.onDrawToggle();
         });
 
-        document.getElementById('save-btn').addEventListener('click', () => {
+        document.getElementById('save-btn').addEventListener('click', async () => {
             console.log('[PdfEditor] Initiating save process...');
+            await this.applyDrawings();
             this.saveToServer();
         });
+    }
+
+    async applyDrawings(){
+        if(!this.getDrawingPaths || !this.currentPdfBytes) return;
+        const {paths,scale} = this.getDrawingPaths();
+        if (!paths || paths.length ===0) return;
+        const{PDFDocument,rgb} = window.PDFLib;
+        const pdfDoc = await PDFDocument.load(this.currentPdfBytes);
+        const pages = pdfDoc.getPages();
+        const firstPage = pages[0];
+        const pageHeight = firstPage.getHeight();
+
+        paths.forEach( path => {
+            if (path.length < 2) return;
+            const startX = path[0].x / scale;
+            const startY = pageHeight - (path[0].y / scale);
+            let svgPath = `M ${startX} ${startY}`;
+
+            for (let i=1; i<path.length;i++){
+                const px = path[i].x / scale;
+                const py = pageHeight - (path[i].y / scale);
+                svgPath += ` L ${px} ${py}`;
+            }
+
+            firstPage.drawSvgPath(svgPath, {
+                borderColor: rgb(1,0,0),
+                borderWidth: 2 / scale,
+            });
+        });
+
+        this.currentPdfBytes = await pdfDoc.save();
     }
 
     async saveToServer() {

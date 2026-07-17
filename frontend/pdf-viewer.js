@@ -2,7 +2,11 @@ export class PdfViewer {
     constructor(containerId){
         this.container = document.getElementById(containerId);
         this.currentDocument = null;
-
+        this.isDrawingMode = false;
+        this.isDrawing = false;
+        this.paths = [];
+        this.currentPath = null;
+        this.scale = 1.5;
         window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     }
 
@@ -48,7 +52,56 @@ export class PdfViewer {
             this.container.innerHTML = `<p style="color: red;">Failed to render PDF.</p>`;
         }
 
-        //this.currentDocument = file;
+        this.canvas = canvas;
+        this.context = this.context;
+        this.canvas.addEventListener('mousedown', this.startDrawing.bind(this));
+        this.canvas.addEventListener('mousemove', this.isDrawing.bind(this));
+        this.canvas.addEventListener('mouseup', this.stopDrawing.bind(this));
+        this.canvas.addEventListener('mouseout', this.stopDrawing.bind(this));
+    }
+
+    toggleDrawingMode(){
+        this.isDrawingMode = !this.isDrawingMode;
+        this.canvas.style.cursor = this.isDrawingMode ? 'crosshiar' : 'default';
+        console.log(`[PdfViewer] Drawing mode: ${this.isDrawingMode}`);
+    }
+
+    startDrawing(e){
+        if (!this.isDrawingMode) return;
+        this.isDrawing = true;
+        const rect = this.canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        this.currentPath = [{x,y}];
+        this.context.beginPath();
+        this.context.moveTo(x,y);
+        this.context.stokeStyle = 'red';
+        this.context.lineWidth = 2;
+        this.context.lineCap = 'round';
+    }
+
+    draw(e){
+        if (!this.isDrawing || this.isDrawingMode) return;
+        const rect = this.canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        this.currentPath.push({x,y});
+        this.context.lineTo(x,y);
+        this.context.stoke();
+    }
+
+    stopDrawing(){
+        if (!this.isDrawing || !this.isDrawingMode) return;
+        this.isDrawing = false;
+        if (this.currentPath && this.currentPath.length > 0){
+            this.paths.push(this.currentPath);
+        }
+        this.currentPath;
+    }
+
+    getPathsForExport(){
+        return {paths: this.paths, scale: this.scale};
     }
 
     zoomIn(){

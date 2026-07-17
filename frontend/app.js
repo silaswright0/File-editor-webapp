@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const editor = new PdfEditor('editor-tools');
     editor.initTools();
 
+    editor.onDrawToggle = () => viewer.toggleDrawingMode();
+    editor.getDrawingPaths = () => viewer.getPathsForExport();
+
     editor.onEdit = async (modifiedBytes) => {
         await viewer.loadPdf(modifiedBytes);
     };
