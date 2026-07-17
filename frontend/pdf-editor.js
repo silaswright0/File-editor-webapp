@@ -75,7 +75,11 @@ export class PdfEditor {
 
         document.getElementById('color-btn').addEventListener('click', () => {
             console.log('[PdfEdtior] Colour tool activated');
-            if (this.onDrawToggle) this.onDrawToggle();
+            if (this.onDrawToggle) {
+                this.onDrawToggle();
+            }else{
+                console.warn('[PdfEditor] onDrawToggle is not connected!')
+            }
         });
 
         document.getElementById('save-btn').addEventListener('click', async () => {
@@ -96,19 +100,23 @@ export class PdfEditor {
         const pageHeight = firstPage.getHeight();
 
         paths.forEach( path => {
-            if (path.length < 2) return;
+            if (path.length === 0) return;
             const startX = path[0].x / scale;
             const startY = pageHeight - (path[0].y / scale);
             let svgPath = `M ${startX} ${startY}`;
 
-            for (let i=1; i<path.length;i++){
-                const px = path[i].x / scale;
-                const py = pageHeight - (path[i].y / scale);
-                svgPath += ` L ${px} ${py}`;
+            if(path.length === 1){
+                svgPath += ` L ${startX + 0.1} ${startY + 0.1}`;
+            }else{
+                for (let i=1; i<path.length;i++){
+                    const px = path[i].x / scale;
+                    const py = pageHeight - (path[i].y / scale);
+                    svgPath += ` L ${px} ${py}`;
+                }
             }
 
             firstPage.drawSvgPath(svgPath, {
-                borderColor: rgb(1,0,0),
+                borderColor: rgb(1, 0, 0),
                 borderWidth: 2 / scale,
             });
         });

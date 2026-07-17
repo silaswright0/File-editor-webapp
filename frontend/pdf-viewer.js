@@ -47,17 +47,17 @@ export class PdfViewer {
             await page.render(renderContext).promise;
 
             console.log('[PdfViewer] Render complete!');
+
+            this.canvas = canvas;
+            this.context = context;
+            this.canvas.addEventListener('pointerdown', this.startDrawing.bind(this));
+            this.canvas.addEventListener('pointermove', this.draw.bind(this));
+            this.canvas.addEventListener('pointerup', this.stopDrawing.bind(this));
+            this.canvas.addEventListener('pointercancel', this.stopDrawing.bind(this));
         } catch (error) {
             console.error("Error rendering PDF:", error);
             this.container.innerHTML = `<p style="color: red;">Failed to render PDF.</p>`;
         }
-
-        this.canvas = canvas;
-        this.context = this.context;
-        this.canvas.addEventListener('mousedown', this.startDrawing.bind(this));
-        this.canvas.addEventListener('mousemove', this.isDrawing.bind(this));
-        this.canvas.addEventListener('mouseup', this.stopDrawing.bind(this));
-        this.canvas.addEventListener('mouseout', this.stopDrawing.bind(this));
     }
 
     toggleDrawingMode(){
@@ -67,31 +67,48 @@ export class PdfViewer {
     }
 
     startDrawing(e){
+        e.preventDefault();
         if (!this.isDrawingMode) return;
         this.isDrawing = true;
+        this.canvas.setPointerCapture(e.pointerId);
+
         const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
 
         this.currentPath = [{x,y}];
         this.context.beginPath();
         this.context.moveTo(x,y);
+
+        this.context.lineTo(x+0.1,y+0.1);
         this.context.stokeStyle = 'red';
-        this.context.lineWidth = 2;
+        this.context.lineWidth = 2 * scaleX;
         this.context.lineCap = 'round';
+        this.context.lineJoin = 'round';
+
+        this.context.stroke();
+
+        console.log(`[PdfViewer] Started drawing at internal X:${x.toFixed(0)}, Y:${y.toFixed(0)}`);
     }
 
     draw(e){
+        e.preventDefault();
         if (!this.isDrawing || this.isDrawingMode) return;
         const rect = this.canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const scaleX = this.canvas.width / rect.width;
+        const scaleY = this.canvas.height / rect.height;
+        const x = (e.clientX - rect.left) * scaleX;
+        const y = (e.clientY - rect.top) * scaleY;
         this.currentPath.push({x,y});
         this.context.lineTo(x,y);
         this.context.stoke();
     }
 
-    stopDrawing(){
+    stopDrawing(e){
+        if(e) e.preventDefault();
         if (!this.isDrawing || !this.isDrawingMode) return;
         this.isDrawing = false;
         if (this.currentPath && this.currentPath.length > 0){
