@@ -84,7 +84,7 @@ export class PdfViewer {
         this.context.moveTo(x,y);
 
         this.context.lineTo(x+0.1,y+0.1);
-        this.context.stokeStyle = 'red';
+        this.context.strokeStyle = 'red';
         this.context.lineWidth = 2 * scaleX;
         this.context.lineCap = 'round';
         this.context.lineJoin = 'round';
@@ -96,7 +96,7 @@ export class PdfViewer {
 
     draw(e){
         e.preventDefault();
-        if (!this.isDrawing || this.isDrawingMode) return;
+        if (!this.isDrawing || !this.isDrawingMode) return;
         const rect = this.canvas.getBoundingClientRect();
         const scaleX = this.canvas.width / rect.width;
         const scaleY = this.canvas.height / rect.height;
@@ -104,7 +104,7 @@ export class PdfViewer {
         const y = (e.clientY - rect.top) * scaleY;
         this.currentPath.push({x,y});
         this.context.lineTo(x,y);
-        this.context.stoke();
+        this.context.stroke();
     }
 
     stopDrawing(e){
@@ -114,7 +114,7 @@ export class PdfViewer {
         if (this.currentPath && this.currentPath.length > 0){
             this.paths.push(this.currentPath);
         }
-        this.currentPath;
+        this.currentPath = null;
     }
 
     getPathsForExport(){

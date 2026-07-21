@@ -101,24 +101,38 @@ export class PdfEditor {
 
         paths.forEach( path => {
             if (path.length === 0) return;
-            const startX = path[0].x / scale;
+            /*const startX = path[0].x / scale;
             const startY = pageHeight - (path[0].y / scale);
-            let svgPath = `M ${startX} ${startY}`;
+            let svgPath = `M ${startX} ${startY}`;*/
 
             if(path.length === 1){
-                svgPath += ` L ${startX + 0.1} ${startY + 0.1}`;
+                //svgPath += ` L ${startX + 0.1} ${startY + 0.1}`;
+                firstPage.drawCircle({
+                    x: path[0].x / scale,
+                    y: pageHeight - (path[0].y / scale),
+                    size: 1.5,
+                    color: rgb(0.95,0.1,0.1),
+                });
             }else{
-                for (let i=1; i<path.length;i++){
+                for (let i=0; i<path.length -1 ;i++){
                     const px = path[i].x / scale;
                     const py = pageHeight - (path[i].y / scale);
-                    svgPath += ` L ${px} ${py}`;
+                    const endX = path[i+1].x / scale;
+                    const endY = pageHeight - (path[i+1].y / scale);
+                    //svgPath += ` L ${px} ${py}`;
+                    firstPage.drawLine({
+                        start: {x: px, y: py},
+                        end: {x: endX, y: endY},
+                        thickness: 3,
+                        color: rgb(0.95,0.1,0.1)
+                    });
                 }
             }
 
-            firstPage.drawSvgPath(svgPath, {
+            /*firstPage.drawSvgPath(svgPath, {
                 borderColor: rgb(1, 0, 0),
                 borderWidth: 2 / scale,
-            });
+            });*/
         });
 
         this.currentPdfBytes = await pdfDoc.save();
